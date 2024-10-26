@@ -1,0 +1,9 @@
+{
+	"name": "my-datafactory-rajat",
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f3976b43-7daa-4a24-b76f-36dab3bfbec6",
+		"tenantId": "435829c4-9aa8-4999-994c-99e4bbd63afd"
+	}
+}
