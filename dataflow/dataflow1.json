@@ -12,10 +12,23 @@
 					"name": "readrawdata"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "transform_data",
+						"type": "DatasetReference"
+					},
+					"name": "transformdata",
+					"description": "Add sink dataset into load table"
+				}
+			],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "filtersalesdata"
+				},
+				{
+					"name": "aggdatausinggrpby",
+					"description": "Add aggregate columns group by month and year"
 				}
 			],
 			"scriptLines": [
@@ -34,7 +47,17 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> readrawdata",
-				"readrawdata filter(SALES>=1500) ~> filter1"
+				"readrawdata filter(SALES>=1500) ~> filtersalesdata",
+				"filtersalesdata aggregate(groupBy(MONTH_ID,",
+				"          YEAR_ID),",
+				"     {total-sales} = sum(SALES)) ~> aggdatausinggrpby",
+				"aggdatausinggrpby sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> transformdata"
 			]
 		}
 	}
